@@ -3,7 +3,7 @@
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { db } from "@/db";
+import { getDb } from "@/db";
 import { flights } from "@/db/schema";
 import {
   checkPassword,
@@ -56,12 +56,12 @@ export async function saveFlight(
 
   const idRaw = formData.get("id");
   if (idRaw) {
-    await db
+    await getDb()
       .update(flights)
       .set(result.data)
       .where(eq(flights.id, Number(idRaw)));
   } else {
-    await db.insert(flights).values(result.data);
+    await getDb().insert(flights).values(result.data);
   }
 
   revalidatePath("/");
@@ -75,7 +75,7 @@ export async function deleteFlight(formData: FormData): Promise<void> {
   const id = Number(formData.get("id"));
   if (!Number.isInteger(id)) return;
 
-  await db.delete(flights).where(eq(flights.id, id));
+  await getDb().delete(flights).where(eq(flights.id, id));
   revalidatePath("/");
   revalidatePath("/admin");
 }

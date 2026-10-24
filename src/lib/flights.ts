@@ -1,17 +1,17 @@
 import "server-only";
 import { desc, eq } from "drizzle-orm";
-import { db } from "@/db";
+import { getDb } from "@/db";
 import { flights, type Flight } from "@/db/schema";
 
 export async function listFlights(): Promise<Flight[]> {
-  return db
+  return getDb()
     .select()
     .from(flights)
     .orderBy(desc(flights.flightDate), desc(flights.id));
 }
 
 export async function getFlight(id: number): Promise<Flight | undefined> {
-  const rows = await db.select().from(flights).where(eq(flights.id, id));
+  const rows = await getDb().select().from(flights).where(eq(flights.id, id));
   return rows[0];
 }
 
