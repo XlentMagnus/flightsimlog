@@ -2,6 +2,7 @@ import Link from "next/link";
 import { buildRoutes } from "@/lib/airports";
 import { computeStats, formatDuration, listFlights } from "@/lib/flights";
 import { SIMULATORS } from "@/lib/validation";
+import { FlightList } from "./flight-list";
 import { FlightMap } from "./flight-map";
 
 export const dynamic = "force-dynamic";
@@ -69,29 +70,21 @@ export default async function Home({
           Inga flygningar loggade an.
         </p>
       ) : (
-        <ul className="divide-y divide-slate-800 rounded-lg border border-slate-800">
-          {rows.map((f) => (
-            <li key={f.id} className="p-4">
-              <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <p className="font-mono text-lg">
-                  {f.departureIcao} <span className="text-slate-500">→</span>{" "}
-                  {f.arrivalIcao}
-                </p>
-                <p className="text-sm text-slate-400">{f.flightDate}</p>
-              </div>
-              <p className="mt-1 text-sm text-slate-300">
-                {f.aircraft} · {f.simulator} · {formatDuration(f.flightTimeMinutes)} ·{" "}
-                {f.distanceNm.toLocaleString("sv-SE")} nm
-                {f.rating ? ` · ${"★".repeat(f.rating)}` : ""}
-              </p>
-              {f.notes ? (
-                <p className="mt-2 whitespace-pre-line text-sm text-slate-400">
-                  {f.notes}
-                </p>
-              ) : null}
-            </li>
-          ))}
-        </ul>
+        <FlightList
+          flights={rows.map((f) => ({
+            id: f.id,
+            flightDate: f.flightDate,
+            departureIcao: f.departureIcao,
+            arrivalIcao: f.arrivalIcao,
+            aircraft: f.aircraft,
+            simulator: f.simulator,
+            flightTimeMinutes: f.flightTimeMinutes,
+            distanceNm: f.distanceNm,
+            rating: f.rating,
+            route: f.route,
+            notes: f.notes,
+          }))}
+        />
       )}
     </div>
   );

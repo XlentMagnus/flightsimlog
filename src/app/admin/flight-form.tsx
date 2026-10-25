@@ -141,6 +141,18 @@ export function FlightForm({ flight }: { flight?: Flight }) {
       </div>
 
       <div>
+        <label className={label} htmlFor="route">Route (valfritt)</label>
+        <input
+          id="route"
+          name="route"
+          defaultValue={flight?.route ?? ""}
+          placeholder="t.ex. SID, waypoints eller airways, STAR"
+          maxLength={500}
+          className={`${input} font-mono`}
+        />
+      </div>
+
+      <div>
         <label className={label} htmlFor="notes">Anteckningar</label>
         <textarea
           id="notes"
