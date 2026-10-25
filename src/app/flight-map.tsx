@@ -85,7 +85,7 @@ export function FlightMap({ routes }: { routes: Route[] }) {
       ref={container}
       role="img"
       aria-label="Karta over flygrutter"
-      className="isolate h-[380px] w-full overflow-hidden rounded-lg border border-slate-800"
+      className="isolate h-[55vh] min-h-[420px] max-h-[720px] w-full overflow-hidden rounded-lg border border-slate-800"
     />
   );
 }
