@@ -20,6 +20,11 @@ export const flightSchema = z.object({
   rating: z
     .union([z.literal(""), z.coerce.number().int().min(1).max(5)])
     .transform((v) => (v === "" ? null : v)),
+  addon: z
+    .string()
+    .trim()
+    .max(80)
+    .transform((v) => (v === "" ? null : v)),
   route: z
     .string()
     .trim()

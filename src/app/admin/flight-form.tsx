@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { saveFlight } from "@/app/actions";
 import type { Flight } from "@/db/schema";
+import { AIRCRAFT, findAircraft } from "@/lib/aircraft";
 import { SIMULATORS } from "@/lib/validation";
 
 const input =
@@ -13,6 +14,8 @@ const label = "mb-1 block text-sm text-slate-400";
 export function FlightForm({ flight }: { flight?: Flight }) {
   const [state, action, pending] = useActionState(saveFlight, undefined);
   const today = new Date().toISOString().slice(0, 10);
+  const [aircraft, setAircraft] = useState(flight?.aircraft ?? "");
+  const notInList = aircraft.trim().length > 0 && !findAircraft(aircraft);
 
   return (
     <form action={action} className="space-y-4">
@@ -57,15 +60,42 @@ export function FlightForm({ flight }: { flight?: Flight }) {
         </div>
       </div>
 
+      <div>
+        <label className={label} htmlFor="aircraft">Flygplan</label>
+        <input
+          id="aircraft"
+          name="aircraft"
+          list="aircraft-list"
+          value={aircraft}
+          onChange={(e) => setAircraft(e.target.value)}
+          placeholder="Borja skriva, t.ex. Airbus A330-300"
+          autoComplete="off"
+          maxLength={80}
+          required
+          className={input}
+        />
+        <datalist id="aircraft-list">
+          {AIRCRAFT.map((a) => (
+            <option key={a.name} value={a.name} />
+          ))}
+        </datalist>
+        {notInList ? (
+          <p className="mt-1 text-xs text-amber-400">
+            Finns inte i flygplanslistan. Flygningen sparas anda, men bilden
+            blir en gissning fran Wikipedia.
+          </p>
+        ) : null}
+      </div>
+
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className={label} htmlFor="aircraft">Flygplan</label>
+          <label className={label} htmlFor="addon">Tillagg/utvecklare (valfritt)</label>
           <input
-            id="aircraft"
-            name="aircraft"
-            defaultValue={flight?.aircraft}
-            placeholder="Airbus A320neo"
-            required
+            id="addon"
+            name="addon"
+            defaultValue={flight?.addon ?? ""}
+            placeholder="t.ex. Fenix, FlyByWire, PMDG"
+            maxLength={80}
             className={input}
           />
         </div>

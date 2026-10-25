@@ -11,6 +11,7 @@ import {
   destroySession,
   isAdmin,
 } from "@/lib/auth";
+import { findAircraft } from "@/lib/aircraft";
 import { flightSchema } from "@/lib/validation";
 
 export type FormState = { error?: string } | undefined;
@@ -42,7 +43,9 @@ function parseFlight(formData: FormData) {
   if (flightTimeMinutes === 0) {
     return { error: "Flygtiden kan inte vara noll." };
   }
-  return { data: { ...rest, flightTimeMinutes } };
+  // Namn som finns i listan sparas med exakt stavning ur listan.
+  const aircraft = findAircraft(rest.aircraft)?.name ?? rest.aircraft;
+  return { data: { ...rest, aircraft, flightTimeMinutes } };
 }
 
 export async function saveFlight(

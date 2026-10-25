@@ -81,6 +81,7 @@ export default async function Home({
             flightTimeMinutes: f.flightTimeMinutes,
             distanceNm: f.distanceNm,
             rating: f.rating,
+            addon: f.addon,
             route: f.route,
             notes: f.notes,
           }))}

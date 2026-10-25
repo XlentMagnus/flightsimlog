@@ -27,6 +27,7 @@ export const flights = pgTable("flights", {
   flightTimeMinutes: integer("flight_time_minutes").notNull(),
   distanceNm: integer("distance_nm").notNull(),
   rating: integer("rating"),
+  addon: text("addon"),
   route: text("route"),
   notes: text("notes"),
   createdAt: timestamp("created_at").notNull().defaultNow(),

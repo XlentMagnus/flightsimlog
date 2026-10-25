@@ -13,6 +13,7 @@ export type FlightRow = {
   flightTimeMinutes: number;
   distanceNm: number;
   rating: number | null;
+  addon: string | null;
   route: string | null;
   notes: string | null;
 };
@@ -65,7 +66,9 @@ export function FlightList({ flights }: { flights: FlightRow[] }) {
                 <p className="text-sm text-slate-400">{f.flightDate}</p>
               </div>
               <p className="mt-1 text-sm text-slate-300">
-                {f.aircraft} · {f.simulator} · {formatDuration(f.flightTimeMinutes)} ·{" "}
+                {f.aircraft}
+                {f.addon ? ` (${f.addon})` : ""} · {f.simulator} ·{" "}
+                {formatDuration(f.flightTimeMinutes)} ·{" "}
                 {f.distanceNm.toLocaleString("sv-SE")} nm
                 {f.rating ? ` · ${"★".repeat(f.rating)}` : ""}
               </p>
@@ -127,6 +130,7 @@ function FlightDetails({
 
         <dl className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
           <Item label="Flygplan" value={f.aircraft} />
+          {f.addon ? <Item label="Tillägg" value={f.addon} /> : null}
           <Item label="Simulator" value={f.simulator} />
           <Item label="Flygtid" value={formatDuration(f.flightTimeMinutes)} />
           <Item
