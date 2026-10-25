@@ -89,7 +89,7 @@ export function FlightList({ flights }: { flights: FlightRow[] }) {
         }}
         onClose={() => setSelected(null)}
         aria-label="Flyginformation"
-        className="m-auto w-[calc(100%-1rem)] max-w-lg overflow-hidden rounded-xl border border-slate-700 bg-slate-900 p-0 text-slate-100 backdrop:bg-black/70"
+        className="m-auto w-[calc(100%-1rem)] max-w-3xl overflow-hidden rounded-xl border border-slate-700 bg-slate-900 p-0 text-slate-100 backdrop:bg-black/70"
       >
         {selected ? <FlightDetails flight={selected} onClose={close} /> : null}
       </dialog>
@@ -107,28 +107,28 @@ function FlightDetails({
   const speed = averageSpeedKt(f.distanceNm, f.flightTimeMinutes);
 
   return (
-    <div className="max-h-[85vh] overflow-y-auto">
+    <div className="max-h-[92vh] overflow-y-auto">
       <AircraftImage key={f.aircraft} name={f.aircraft} />
 
-      <div className="space-y-4 p-5">
+      <div className="space-y-6 p-6 sm:p-8">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h2 className="font-mono text-2xl">
+            <h2 className="font-mono text-3xl sm:text-4xl">
               {f.departureIcao} <span className="text-slate-500">→</span>{" "}
               {f.arrivalIcao}
             </h2>
-            <p className="text-sm text-slate-400">{f.flightDate}</p>
+            <p className="mt-1 text-base text-slate-400">{f.flightDate}</p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-md border border-slate-700 px-3 py-1 text-sm text-slate-300 hover:text-white"
+            className="rounded-md border border-slate-700 px-4 py-2 text-base text-slate-300 hover:text-white"
           >
             Stäng
           </button>
         </div>
 
-        <dl className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
+        <dl className="grid grid-cols-2 gap-x-6 gap-y-5 text-lg sm:grid-cols-3">
           <Item label="Flygplan" value={f.aircraft} />
           {f.addon ? <Item label="Tillägg" value={f.addon} /> : null}
           <Item label="Simulator" value={f.simulator} />
@@ -149,10 +149,10 @@ function FlightDetails({
 
         {f.route ? (
           <div>
-            <p className="text-xs uppercase tracking-wide text-slate-500">
+            <p className="text-sm uppercase tracking-wide text-slate-500">
               Route
             </p>
-            <p className="mt-1 break-words font-mono text-sm text-slate-200">
+            <p className="mt-1.5 break-words font-mono text-base text-slate-200">
               {f.route}
             </p>
           </div>
@@ -160,10 +160,10 @@ function FlightDetails({
 
         {f.notes ? (
           <div>
-            <p className="text-xs uppercase tracking-wide text-slate-500">
+            <p className="text-sm uppercase tracking-wide text-slate-500">
               Anteckningar
             </p>
-            <p className="mt-1 whitespace-pre-line text-sm text-slate-300">
+            <p className="mt-1.5 whitespace-pre-line text-base leading-relaxed text-slate-300">
               {f.notes}
             </p>
           </div>
@@ -176,8 +176,8 @@ function FlightDetails({
 function Item({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="text-xs uppercase tracking-wide text-slate-500">{label}</dt>
-      <dd className="mt-0.5 text-slate-100">{value}</dd>
+      <dt className="text-sm uppercase tracking-wide text-slate-500">{label}</dt>
+      <dd className="mt-1 text-slate-100">{value}</dd>
     </div>
   );
 }
@@ -198,12 +198,12 @@ function AircraftImage({ name }: { name: string }) {
   }, [name]);
 
   if (state.status === "loading") {
-    return <div className="h-48 animate-pulse bg-slate-800" aria-hidden />;
+    return <div className="aspect-video w-full animate-pulse bg-slate-800" aria-hidden />;
   }
 
   if (!state.image) {
     return (
-      <div className="flex h-24 items-center justify-center bg-slate-800 text-sm text-slate-500">
+      <div className="flex h-40 items-center justify-center bg-slate-800 text-base text-slate-500">
         Ingen bild hittades
       </div>
     );
@@ -215,9 +215,9 @@ function AircraftImage({ name }: { name: string }) {
       <img
         src={state.image.imageUrl}
         alt={`${name} (bild från Wikipedia)`}
-        className="h-48 w-full bg-slate-800 object-cover sm:h-56"
+        className="aspect-video w-full bg-slate-800 object-cover"
       />
-      <figcaption className="bg-slate-950 px-5 py-1.5 text-xs text-slate-500">
+      <figcaption className="bg-slate-950 px-6 py-2 text-sm text-slate-500 sm:px-8">
         Bild via{" "}
         <a
           href={state.image.pageUrl}
